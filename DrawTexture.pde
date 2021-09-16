@@ -75,6 +75,8 @@ void draw() {
 
   blendMode(ADD);
   image(gfx, 0, 0, width, height);
+  
+  surface.setTitle("" + frameRate);
 }
 
 void mousePressed() {
