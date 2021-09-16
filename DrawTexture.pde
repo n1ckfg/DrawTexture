@@ -2,15 +2,16 @@ PImage img;
 PShape brush;
 float dim = 1;
 float scaler = 5;
-float lerpSpeed = 0.1;
+float lerpSpeed = 0.2;
 PVector target;
-int alphaVal = 80;
+int alphaVal = 40;
 PGraphics gfx, gfx2, gfx3;
+boolean armInit = false;
+float mouseSpread = 50;
 
 void setup() {
   size(800, 600, P2D);
   img = loadImage("brush.png");
-  target = new PVector(width/2, height/2);
   init();
 }
 
@@ -21,10 +22,15 @@ void init() {
 }
 
 void keyPressed() {
-  init();
+  armInit = true;
 }
 
 void draw() {
+  if (armInit) {
+    init();
+    armInit = false;
+  }
+  
   background(0);
   
   if (mousePressed) {
@@ -62,13 +68,20 @@ void draw() {
   }
   
   blendMode(BLEND);
-  image(gfx, 0, 0, width, height);
-  blendMode(ADD);
-  image(gfx2, 0, 0, width, height);
   image(gfx3, 0, 0, width, height);
+
+  blendMode(SUBTRACT);
+  image(gfx2, 0, 0, width, height);
+
+  blendMode(ADD);
+  image(gfx, 0, 0, width, height);
 }
 
 void mousePressed() {
+  float newX = mouseX + random(mouseSpread) - random(mouseSpread);
+  float newY = mouseY + random(mouseSpread) - random(mouseSpread);
+  target = new PVector(newX, newY);
+
   brush = createShape();
   brush.beginShape();
   brush.noFill();
